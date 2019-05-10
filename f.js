@@ -1,4 +1,9 @@
-function f (filter){
+function f (filter){  
+    if(filter == undefined){
+        console.error("Missing arguments!\n f(filter)");
+        return;
+    }
+
     if(filter.includes("#"))
         return document.getElementById(filter.split('#')[1]);
     else if(filter.includes("."))
@@ -12,7 +17,7 @@ function f (filter){
 function fAll (filter,command){
     if(filter == undefined || command == undefined){
         console.error("Missing arguments!\n fAll(filter,command)");
-        return "";
+        return;
     }
 
     var components;
@@ -26,16 +31,22 @@ function fAll (filter,command){
         components = document.getElementsByTagName(filter);
 
     var result = [];
-    for(var i =0 ; i < components.length; i++){
-        if(command.includes(",")){
-            var commands = command.split(",");
-            var inResult = {};
-            for(var x = 0; x < commands.length; x++){
-                inResult[commands[x]] = eval("components[i]." + commands[x]);
+    if(typeof(command) == "function"){
+        for(var i =0 ; i < components.length; i++){
+            result.push(command(components[i]));
+        }
+    }else{
+        for(var i =0 ; i < components.length; i++){
+            if(command.includes(",")){
+                var commands = command.split(",");
+                var inResult = {};
+                for(var x = 0; x < commands.length; x++){
+                    inResult[commands[x]] = eval("components[i]." + commands[x]);
+                }
+                result.push(inResult);
+            }else{
+                result.push(eval("components[i]." + command));
             }
-            result.push(inResult);
-        }else{
-            result.push(eval("components[i]." + command));
         }
     }
 
@@ -43,6 +54,10 @@ function fAll (filter,command){
 }
 
 function fConvert(toConvert){
+    if(toConvert == undefined){
+        console.error("Missing arguments!\n fConvert(var)");
+        return;
+    }
     var result;
     if(typeof(toConvert) == "object"){ 
         result = "";
@@ -60,7 +75,11 @@ function fConvert(toConvert){
     return result;
 }
 
-function fget(url,callback){
+function fGet(url,callback){
+    if(url == undefined || callback == undefined){
+        console.error("Missing arguments!\n fGet(url,callback)");
+        return;
+    }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -71,7 +90,11 @@ function fget(url,callback){
     xhttp.send();
 }
 
-function fpost(url,params,callback){
+function fPost(url,params,callback){
+    if(url == undefined || callback == undefined || params == undefined){
+        console.error("Missing arguments!\n fPost(url,params,callback)");
+        return;
+    }
     var http = new XMLHttpRequest();
     http.open('POST', url, true);
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -83,7 +106,11 @@ function fpost(url,params,callback){
     http.send(params);
 }
 
-function ftime(callback,time,times){
+function fTime(callback,time,times){
+    if(callback == undefined || time == undefined){
+        console.error("Missing arguments!\n fTime(callback,time,times)");
+        return;
+    }
     if(times != undefined){
         for(var i = 0; i < times; i++){
             setTimeout(() => {
@@ -97,22 +124,50 @@ function ftime(callback,time,times){
     }
 }
 
-function fstop(ft){
+function fStop(ft){
+    if(ft == undefined){
+        console.error("Missing arguments!\n fStop(interval)");
+        return;
+    }
     clearInterval(ft);
 }
 
-function fevent(elem,event,callback){
+function fInit(callback){
+    if(callback == undefined){
+        console.error("Missing arguments!\n fInit(callback)");
+        return;
+    }
+    window.addEventListener("load",function(){ 
+        setTimeout(() => {
+            callback();
+        }, 100);
+    });
+}
+
+function fEvent(elem,event,callback){
+    if(elem == undefined || event == undefined || callback == undefined){
+        console.error("Missing arguments!\n fEvent(element,event,callback)");
+        return;
+    }
     elem.addEventListener(event,callback(e));
 }
 
-function fonly(elem,only){
+function fOnly(elem,only){
+    if(elem == undefined || only == undefined){
+        console.error("Missing arguments!\n fOnly(element,keys)");
+        return;
+    }
     elem.addEventListener("keypress",function(e){   
         if(!only.includes(e.key))
             e.preventDefault();
     });
 }
 
-function fmask(elem,mask){
+function fMask(elem,mask){
+    if(elem == undefined || mask == undefined){
+        console.error("Missing arguments!\n fMask(element,mask)");
+        return;
+    }
     elem.addEventListener("keypress",function(e){   
         if(elem.value.length >= mask.length){
             e.preventDefault();
@@ -126,9 +181,11 @@ function fmask(elem,mask){
 }
 
 var grid_selected = null;
-
-function fgrid(list,elem,options){
-
+function fGrid(list,elem,options){
+    if(elem == undefined || list == undefined){
+        console.error("Missing arguments!\n fGrid(list,element,options)");
+        return;
+    }
     grid_selected = null;
 
     if(f("#grid") != null)
@@ -137,8 +194,8 @@ function fgrid(list,elem,options){
     if(options == undefined)
         options = {
             trAtribs : "",
-            tdAtribs : "bgcolor='#d8d8d8' style='cursor: pointer'",
-            thAtribs : "bgcolor='#4286f4' style='color: white'",
+            tdAtribs : "bgcolor='#d8d8d8' style='cursor: pointer;-webkit-user-select:none'",
+            thAtribs : "bgcolor='#4286f4' style='color: white;-webkit-user-select:none'",
             onselected : function(e){ e.style.backgroundColor = '#999999'; },
             onunselected : function(e){ e.style.backgroundColor = '#d8d8d8'; },
             onhover : function(e){ e.style.backgroundColor = '#cccccc'; },
@@ -156,9 +213,9 @@ function fgrid(list,elem,options){
     if(options.onunselected == undefined)
         options.onunselected = function(e){ e.style.backgroundColor = '#d8d8d8'; };
     if(options.tdAtribs == undefined)
-        options.tdAtribs = "bgcolor='#d8d8d8' style='cursor: pointer'";
+        options.tdAtribs = "bgcolor='#d8d8d8' style='cursor: pointer;-webkit-user-select:none'";
     if(options.thAtribs == undefined)
-        options.thAtribs = "bgcolor='#4286f4' style='color: white'";
+        options.thAtribs = "bgcolor='#4286f4' style='color: white;-webkit-user-select:none'";
     if(options.onhover == undefined)
         options.onhover = function(e){ e.style.backgroundColor = '#cccccc'; };
     if(options.onclick == undefined)
@@ -263,5 +320,58 @@ function fgrid(list,elem,options){
                 }
             });
         }
+    }
+}
+
+function fIndex(array,value,onlyone){
+    if(array == undefined || value == undefined){
+        console.error("Missing arguments!\n fIndex(array,value,onlyone)");
+        return;
+    }
+    var result = null;
+
+    if(onlyone == undefined)
+        onlyone = false;
+
+    for(var i = 0; i < array.length; i++){
+        if(array[i] == value){
+            if(result == null)
+                result = i;
+            else if(onlyone == false)
+                result += ","+i;
+        }
+    }
+    if(typeof(result) != "number"){
+        return fConvert(result).map(function(item) {
+            return parseInt(item);
+        });
+    }else{
+        return result;
+    }
+}
+
+function fAssoc(array,value,onlyone){
+    if(array == undefined || value == undefined){
+        console.error("Missing arguments!\n fAssoc(array,value,onlyone)");
+        return;
+    }
+    var result = null;
+    var keys = Object.keys(array);
+
+    if(onlyone == undefined)
+        onlyone = false;
+
+    for(var i = 0; i < keys.length; i++){
+        if(array[keys[i]] == value){
+            if(result == null)
+                result = keys[i];
+            else if(onlyone == false)
+                result += ","+keys[i];
+        }
+    }
+    if(result.includes(",")){
+        return fConvert(result);
+    }else{
+        return result;
     }
 }

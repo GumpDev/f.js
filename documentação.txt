@@ -1,0 +1,192 @@
+==================
+|   f.js v1      |
+|      By Gump   |
+==================
+
+Descrição: f.js é um facilitador de comandos para js, transformando grandes comandos em apenas algumas funções.
+
+Comandos:
+    f(filtro); - Comando f() é usado para achar algum elemento do HTML, retorna um elemento ou uma lista de elementos.
+                L Parametros: 
+                    L filtro - string:
+                        * = todos elementos
+                        # = id
+                        . = classe
+                        @ = nome
+                        (nenhum) = Tag
+                L Exemplos:
+                    f("*") - Pega todos elementos.
+                    f("#teste") - Pega o Elemento com o id teste. 
+                    f(".teste") - Pega os Elementos com o classe teste. 
+                    f("@teste") - Pega os Elementos com o nome teste.
+                    f("div") - Pega os Elementos de tag div.
+
+    fAll(filtro,comando) - Comando fAll() é usado para efeituar varios comandos em varios elementos ao mesmo tempo
+                L Parametros:
+                    L filtro - string:
+                        * = todos elementos
+                        # = id
+                        . = classe
+                        @ = nome
+                        (nenhum) = Tag
+                    L comando - string ou function:
+                        string - ele efetua o comando em todos elementos, separe os comandos por ','
+                        function - ele efetua a função com o elemento como parametro
+                L Exemplos:
+                    f("*","value") - Vai retornar o valor de todos elementos.
+                    f("*","value,id") - Vai retornar uma array com o valor e o id de todos elementos.
+                    f("*",function(elemento){
+                        return elemento.name;
+                    }); - Vai retornar uma valor da função usando o elemento como primeiro parametro.
+
+    fConvert(var); - Comando fConvert() é usado para converter uma string em array e array em string   
+                L Parametros: 
+                    L var - string ou array:
+                        string - converte o string com uma lista separada por ',' em uma array.
+                        array - converte a array em uma lista por string separada por ','.
+                L Exemplos:
+                    fConvert('1,2,3') - Vai retornar uma array com esses valores: [1,2,3].
+                    fConvert([1,2,3]) - Vai retornar um string com esses valores: "1,2,3".
+
+    fGet(url,callback); - Comando fGet() é usado para fazer um Request de HTTP pelo metodo GET
+                L Parametros:
+                    L url - string:
+                        url que irá fazer o Request.
+                    L callback - function:
+                        função que ele irá chamar ao conseguir o retorno do Request, com a resposta do get no primeiro parametro.
+                L Exemplo:
+                    fGet('../teste.html',function(data){
+                        console.log(data);
+                    }); - Ele irá mostrar no console a resposta do Request da paginas teste.html;
+
+    fPost(url,parametros,callback); - Comando fPost() é usado para fazer um Request de HTTP pelo metodo POST
+                L Parametros:
+                    L url - string:
+                        url que irá fazer o Request.
+                    L parametros - array por associação:
+                        valores que serão passados por POST
+                    L callback - function:
+                        função que ele irá chamar ao conseguir o retorno do Request, com a resposta do get no primeiro parametro.
+                L Exemplos:
+                    fPost('../teste.html',{
+                        teste : 1
+                    },function(data){
+                        console.log(data);
+                    }); - Ele irá mostrar no console a resposta do Request da paginas teste.html com os valores de teste passado por POST.
+    
+    fTime(callback,tempo,repeticao); - Comando fTime() cria uma repetição ou um intervalo para executar alguma função.
+                L Parametros:
+                    L callback - function:
+                        Executa a função no intervalo ou na repetição.
+                    L tempo - float:
+                        Tempo para intervalo ou repetição em segundos.
+                    L repeticao - int (Opcional):
+                        Quantidade de vezes que irá ser repetido a função, se não houver vai ser infinito.
+                L Exemplos:
+                    fTime(function(){
+                        console.log("Teste");
+                    },1); - Exibe 'Teste' no console a cada segundo.
+                    fTime(function(){
+                        console.log("Teste");
+                    },1,10); - Exibe 'Teste' no console a cada segundo apenas 10 vezes.
+
+    fStop(intervalo); - Comando fStop() é usado para parar um intervalo infinito
+                L Parametros:
+                    L intervalo - interval:
+                        Ele para um Interval ou um fTime() sem limite de repeticao.
+                L Exemplos:
+                    var intervalo = fTime(function(){
+                        console.log("Teste");
+                    },1);
+                    fStop(intervalo); - Ao Executar o programa ele vai parar a repeticao sem limite de repeticao.
+
+    fInit(callback); - Comando fInit() é usado para executar uma função quando a pagina carregar.
+                L Parametros:
+                    L callback - function:
+                        Função que será chamada ao carregar a pagina.
+                L Exemplos:
+                    fInit(function(){
+                        alert("Iniciado!");
+                    }); - Ele exibe um alerta falando 'Iniciado!' ao carregar a pagina.
+
+    fEvent(elemento,evento,callback); - Comando fEvent() é usado para adicionar uma função ao executar algum evento em algum Elemento.
+                L Parametros:
+                    L elemento - Element:
+                        Elemento que será captado o evento.
+                    L evento - String:
+                        Nome do evento a ser capturado.
+                    L callback - function:
+                        Função Chamada ao ser efeituado o evento com o event passado como primeiro parametro.
+                L Exemplos:
+                    fEvent(f("#teste'),'mouseover',function(e){
+                        console.log(e);
+                    }); - Ele exibe o evento no Console quando o mouse passa encima do Elemento com o id teste.
+
+    fOnly(elemento,caracteres); - Comando fOnly() é usado para limitar os caracteres que pode ser inseridos em algum input.
+                L Parametros:
+                    L elemento - Element:
+                        Elemento que irá receber a limitação.
+                    L caracteres - String ou Array:
+                        caracteres que pode ser inserida.
+                L Exemplos:
+                    fOnly(f("#teste"),"1234567890"); - Faz que o input só pode receber numeros por string.
+                    fOnly(f("#teste"),"[1,2,3,4,5,6,7,8,9,0]"); - Faz que o input só pode receber numeros por array.
+
+    fMask(elemento,mascara); - Comando fMask() é usado para colocar uma mascara em um input
+                L Parametros:
+                    L elemento - Element:
+                        Elemento que irá receber a mascara.
+                    L mascara - String:
+                        mascara que será usado no input, se for '_' é o caractere inserido.
+                L Exemplos: 
+                    fMask(f("#teste"),"__/__/____"); - Fica com mascara parecida da data, tipo: 21/05/2003
+
+    fGrid(lista,elemento,options); - Comando fGrid() é usado para criar uma tabela com valores de uma array inserida.
+                L Parametros:
+                    L lista - Array:
+                        Lista por associação para ser exibida na tabela.
+                    L elemento - Element:
+                        Elemento que irá receber a tabela.
+                    L options - Array (Opcional):
+                        Modifica as opções da tabela.
+                        {
+                            trAtribs : "", - Atributos HTML para o TR da Tabela.
+                            tdAtribs : "", - Atributos HTML para o TD da Tabela.
+                            thAtribs : "", - Atributos HTML para o TH da Tabela.
+                            onselected : function(e){ }, - Função que irá ser chamada ao selecionar o item.
+                            onunselected : function(e){ }, - Função que irá ser chamada ao ser o item deselecionado.
+                            onhover : function(e){ }, - Função que irá ser chamada ao mouse passar por cima do item. 
+                            onout : function(e){ }, - Função que irá ser chamada ao mouse sair de cima do item. 
+                            onclick : function(e){ }, - Função que irá ser chamada ao clicar no item. 
+                            result : function(e){ } - Ao cliente selecionar um item e retorna os valores selecionados.
+                        }
+                L Exemplos:
+                    fgrid({teste:['teste',121,12],teste2:['teste2','121',3],teste3:[true,false]},document.body); - Exibe uma tabela com 3 arrays no body.
+
+    fIndex(array,valor,apenasUm) - Pega o Index de algum item de alguma array.
+                L Parametros:
+                    L array - Array:
+                        Array que será consultada.
+                    L valor - string, int, float...
+                        Valor que será achado na Array.
+                    L apenasUm - Bool (Opcional):
+                        Se estiver true so retorna 1 valor, se estiver falso e houver mais de um index com o mesmo valor vai ser retornado uma array.
+                L Exemplos:
+                    fIndex([1,2,3],2) - Irá Retoronar o Index. 1
+                    fIndex([1,2,2],2) - Irá Retoronar o Index. [1,2]
+                    fIndex([1,2,2],2,true) - Irá Retoronar o Primeiro Index. 1
+                    fIndex([2,2,2],2,false) - Irá Retoronar o Index. [0,1,2] 
+
+    fAssoc(array,valor,apenasUm) - Pega o nome de uma array por associação
+                L parametros:
+                    L array - Array:
+                        Array que será consultada.
+                    L valor - string, int, float...
+                        Valor que será achado na Array.
+                    L apenasUm - Bool (Opcional):
+                        Se estiver true so retorna 1 valor, se estiver falso e houver mais de um index com o mesmo valor vai ser retornado uma array.
+                L Exemplos:
+                    fAssoc({teste:1,teste2:2,teste3:3},2) - Irá Retoronar a associação. teste
+                    fAssoc({teste:1,teste2:2,teste3:2},2) - Irá Retoronar a associação. ['teste2','teste3']
+                    fAssoc({teste:1,teste2:2,teste3:2},2,true) - Irá Retoronar a primeira associação. 'teste2'
+                    fAssoc({teste:2,teste2:2,teste3:2},2,false) - Irá Retoronar a associação. ['teste','teste2','teste3']
