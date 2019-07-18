@@ -4,10 +4,12 @@ var fAddonsVariables = {};
 function f(filter){
     if(typeof(filter) == "string")
         return {...{
-            filter: filter,
-            element : document.querySelector(filter),       
-            elements : document.querySelectorAll(filter),
-            style : document.querySelector(filter).style,
+            filter      : filter,
+            status      : document.querySelectorAll(filter).length > 0 ? "ok" : "error",
+            searched    : document.querySelectorAll(filter).length,
+            element     : document.querySelector(filter),       
+            elements    : document.querySelectorAll(filter),
+            style       : document.querySelector(filter) != null ? document.querySelector(filter).style : null,
 
             styleAll : function(style){      
                 if(style == undefined){
@@ -37,7 +39,7 @@ function f(filter){
                 }
             },
 
-            html : function(html){
+            html : function(html,json){
                 if(html == undefined){
                     var returnTxt = [];
                     for(var i = 0; i < this.elements.length; i++){
@@ -48,13 +50,19 @@ function f(filter){
                     }
                     return returnTxt;
                 }else{
-                    for(var i = 0; i < this.elements.length; i++){
-                        this.elements[i].innerHTML = html;
+                    if(json == true){
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].innerHTML = html[this.elements[i].id] != undefined ? html[this.elements[i].id] : "";
+                        }
+                    }else{
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].innerHTML = html;
+                        }
                     }
                 }
             },
 
-            text : function(text){
+            text : function(text,json){
                 if(text == undefined){
                     var returnTxt = [];
                     for(var i = 0; i < this.elements.length; i++){
@@ -65,13 +73,19 @@ function f(filter){
                     }
                     return returnTxt;
                 }else{
-                    for(var i = 0; i < this.elements.length; i++){
-                        this.elements[i].innerText = text;
+                    if(json == true){
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].innerText = text[this.elements[i].id] != undefined ? text[this.elements[i].id] : "";
+                        }
+                    }else{
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].innerText = text;
+                        }
                     }
                 }
             },
 
-            value : function(value){
+            value : function(value,json){
                 if(value == undefined){
                     var returnTxt = [];
                     for(var i = 0; i < this.elements.length; i++){
@@ -82,13 +96,19 @@ function f(filter){
                     }
                     return returnTxt;
                 }else{
-                    for(var i = 0; i < this.elements.length; i++){
-                        this.elements[i].value = value;
+                    if(json == true){
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].value = value[this.elements[i].id] != undefined ? value[this.elements[i].id] : "";
+                        }
+                    }else{
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].value = value;
+                        }
                     }
                 }
             },
 
-            post : function(value,url,post){     
+            post : function(value,url,post,json){     
                 if(value == undefined || url == undefined){
                     console.error("Missing arguments!\n f(filter).post(value,url,post);");
                     return false;
@@ -101,12 +121,12 @@ function f(filter){
 
                 fPost(url,post,function(data){
                     if(value == "html")
-                        f(filter).html(data);
+                        f(filter).html(data,json);
                     else if(value == "text")
-                        f(filter).text(data);
+                        f(filter).text(data,json);
                     else
-                        f(filter).value(data);
-                });
+                        f(filter).value(data,json);
+                },true);
             },
             
             get : function(value,url,get){     
@@ -122,12 +142,12 @@ function f(filter){
 
                 fGet(url,get,function(data){
                     if(value == "html")
-                        f(filter).html(data);
+                        f(filter).html(data,json);
                     else if(value == "text")
-                        f(filter).text(data);
+                        f(filter).text(data,json);
                     else
-                        f(filter).value(data);
-                });
+                        f(filter).value(data,json);
+                },true);
             },
 
             event : function(event,callback){
@@ -157,15 +177,15 @@ function f(filter){
                     this.elements[i].style.display = "none";
             },
 
-            toggle : function(type){
+            toggle : function(type,time){
                 if(type == undefined)
                     type = "inline-block";
 
                 for(var i = 0; i < this.elements.length; i++){
-                    if(this.element[i].style.display == type)
-                        this.elements[i].style.display = "none";
-                    else
+                    if(this.elements[i].style.display == "none")
                         this.elements[i].style.display = type;
+                    else
+                        this.elements[i].style.display = "none";
                 }
             },
 
@@ -373,7 +393,7 @@ function fInit (callback){
     });
 }
 
-function fPost(url,post,callback){
+function fPost(url,post,callback,json){
     if(url == undefined || callback == undefined || post == undefined){
         console.error("Missing arguments!\n fPost(url,post,callback(data))");
         return;
@@ -395,13 +415,16 @@ function fPost(url,post,callback){
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
-            callback(http.responseText);
+            if(json)
+                callback(JSON.parse(http.responseText));
+            else
+                callback(http.responseText);
         }
     }
     http.send(post_name);
 }
 
-function fGet(url,get,callback){
+function fGet(url,get,callback,json){
     if(url == undefined){
         console.error("Missing arguments!\n fPost(url,post,callback(data))");
         return;
@@ -428,7 +451,10 @@ function fGet(url,get,callback){
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
-            callback(http.responseText);
+            if(json)
+                callback(JSON.parse(http.responseText));
+            else
+                callback(http.responseText);
         }
     }
     http.send(get_name);
