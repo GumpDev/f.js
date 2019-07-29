@@ -37,8 +37,10 @@
             var codigos = [];
             for(var x = 0; x < alfabeto.length; x++){
                 for(var y = 0; y < alfabeto.length; y++){
-                    console.log(x + "x" + y + " = " + fHash(alfabeto[x]+alfabeto[y],1) + " - " + codigos.includes(fHash(alfabeto[x]+alfabeto[y],1)));
-                    codigos.push(fHash(alfabeto[x]+alfabeto[y],1));
+                    for(var z = 0; z < alfabeto.length; z++){
+                        console.log(x + "x" + y + "x" + z + " = " + fHash(alfabeto[x]+alfabeto[y]+alfabeto[z],1) + " - " + codigos.includes(fHash(alfabeto[x]+alfabeto[y]+alfabeto[z],1)));
+                        codigos.push(fHash(alfabeto[x]+alfabeto[y]+alfabeto[z],1));
+                    }
                 }   
             }
         }
