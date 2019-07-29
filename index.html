@@ -12,7 +12,7 @@
         function fHash(txt,seed){
             var retorno = 0;
             for(var i = 0; i < txt.length; i++){
-                var valor = Math.round(Math.sqrt(txt.charCodeAt(i)) * 100000000 * Math.round(seed * Math.PI)) ;
+                var valor = Math.round(Math.sqrt(txt.charCodeAt(i) + i * Math.cos(i * seed)) * 1000000000000 * Math.round(seed * Math.PI));
                 retorno += valor;
             }
             retorno = retorno.toString(16);
@@ -31,6 +31,16 @@
                     retorno2 += "0";
             }
             return retorno2;
+        }
+        function teste(){
+            var alfabeto = " 0123456789abcdefghijklmnopqrstuvwxyz";
+            var codigos = [];
+            for(var x = 0; x < alfabeto.length; x++){
+                for(var y = 0; y < alfabeto.length; y++){
+                    console.log(x + "x" + y + " = " + fHash(alfabeto[x]+alfabeto[y],1) + " - " + codigos.includes(fHash(alfabeto[x]+alfabeto[y],1)));
+                    codigos.push(fHash(alfabeto[x]+alfabeto[y],1));
+                }   
+            }
         }
     </script>
 </body>
