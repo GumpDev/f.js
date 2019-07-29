@@ -12,7 +12,7 @@
         function fHash(txt,seed){
             var retorno = 0;
             for(var i = 0; i < txt.length; i++){
-                var valor = Math.round(Math.sqrt(txt.charCodeAt(i)) * 100) * Math.round(seed * Math.PI);
+                var valor = Math.round(Math.sqrt(txt.charCodeAt(i)) * 100000000 * Math.round(seed * Math.PI)) ;
                 retorno += valor;
             }
             retorno = retorno.toString(16);
