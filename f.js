@@ -11,9 +11,9 @@ function f(filter){
             elements    : document.querySelectorAll(filter),
             style       : document.querySelector(filter) != null ? document.querySelector(filter).style : null,
 
-            styleAll : function(style){      
+            css : function(style){      
                 if(style == undefined){
-                    console.error("Missing arguments!\n f(filter).styleAll(style);");
+                    console.error("Missing arguments!\n f(filter).css(style);");
                     return false;
                 }
                 
@@ -177,7 +177,7 @@ function f(filter){
                     this.elements[i].style.display = "none";
             },
 
-            toggle : function(type,time){
+            toggle : function(type){
                 if(type == undefined)
                     type = "inline-block";
 
@@ -264,30 +264,29 @@ function f(filter){
                     }
 
                     if(e.code == "Delete"){
-                        if(selectedStart != 0 || selectedStart != selectedEnd){
-                            var txt = "";
-                            for(var i = 0; i < elem.value.length; i++){
-                                if(selectedStart == selectedEnd){
-                                    if(elem.selectionStart == i)
-                                        txt += mask[i];
-                                    else
-                                        txt += elem.value[i];
-                                }else{
-                                    if(selectedStart <= i && i < selectedEnd)
-                                        txt += mask[i];
-                                    else
-                                        txt += elem.value[i];
-                                }
-                            }
-                            elem.value = txt;
+                        var txt = "";
+                        for(var i = 0; i < elem.value.length; i++){
                             if(selectedStart == selectedEnd){
-                                elem.selectionStart = selectedEnd + 1;
-                                elem.selectionEnd = selectedEnd + 1;
+                                if(elem.selectionStart == i)
+                                    txt += mask[i];
+                                else
+                                    txt += elem.value[i];
                             }else{
-                                elem.selectionStart = selectedEnd;
-                                elem.selectionEnd = selectedEnd;
+                                if(selectedStart <= i && i < selectedEnd)
+                                    txt += mask[i];
+                                else
+                                    txt += elem.value[i];
                             }
                         }
+                        elem.value = txt;
+                        if(selectedStart == selectedEnd){
+                            elem.selectionStart = selectedEnd + 1;
+                            elem.selectionEnd = selectedEnd + 1;
+                        }else{
+                            elem.selectionStart = selectedEnd;
+                            elem.selectionEnd = selectedEnd;
+                        }
+                        
                         e.preventDefault();
                     }
                 });
@@ -302,7 +301,109 @@ function f(filter){
                         ret = false;
                 }
                 return ret;
+            },
+            
+            setInputType : function(type,options){
+                if(type == undefined){
+                    console.error("Missing arguments!\n f(filter).setInputType(type)");
+                    return;
+                }
+                if(options == undefined) options = {};
+
+                switch(type.toLowerCase()){
+                    //Autocomplete
+                    //Calendar
+                    //Color
+                    //Date
+                    //DateTime
+                    //Time
+                    //Option Checkbox
+                    case 'tags':
+                        for(var i = 0; i < this.elements.length; i++){
+                            this.elements[i].type = "hidden";
+                            this.elements[i].value = "";
+
+                            if(f("#fTag_"+this.elements[i].id).status == "ok") f("#fTag_"+this.elements[i].id).element.remove();
+                            
+                            var div = document.createElement("div");
+                            div.className = "fTags";
+                            div.id = "fTag_"+this.elements[i].id;
+                            if(options['width'] != undefined)
+                                div.style.width = options['width'];
+                            this.elements[i].parentElement.appendChild(div);
+
+                            var div2 = document.createElement("div");
+                            div2.className = "fTags_itens";
+                            div2.id = "fTag_itens_"+this.elements[i].id;
+                            div.appendChild(div2);
+                            
+                            var input = document.createElement("input");
+                            input.type = "text";
+                            input.className = "fTags_input";
+                            input.id = "fTag_input_"+this.elements[i].id;
+                            if(options['height'] != undefined)
+                                input.style.fontSize = options['height'];
+                            div.appendChild(input);
+                            if(options['only'] != undefined)
+                                f("#fTag_input_"+this.elements[i].id).only(options['only']);
+
+                            f("#"+input.id).only("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇç");
+                            
+                            div.addEventListener("click",function(){input.focus();});
+
+                            f("#fTag_input_"+this.elements[i].id).event('keydown',function(e){
+                                if(e.key == "Backspace" && f("#"+e.target.id.split("_")[2]).element.value.length > 0 && e.target.value.length < 1){
+                                    var val = f("#"+e.target.id.split("_")[2]).element.value.split(',')[f("#"+e.target.id.split("_")[2]).element.value.split(',').length - 1];
+                                    f("#"+e.target.id.split("_")[2]).dropTagValue(val);
+                                    return;
+                                }
+                            });
+
+                            f("#fTag_input_"+this.elements[i].id).event('keypress',(e)=>{
+                                var x = f("#fTag_input_"+this.element.id).element.value.split(" ").length;
+                                var y = f("#fTag_input_"+this.element.id).element.value.length;
+
+                                if((e.key == "Enter" || e.key == " " || e.key == "," )&& f("#fTag_input_"+this.element.id).element.value.length > 0 && x <= y){
+                                    e.preventDefault();
+                                    var results = this.element.value.split(","); 
+                                    if(!results.includes(f("#fTag_input_"+this.element.id).element.value)){
+                                        //ToAdd = f().addTagValue(id);
+                                        if(this.element.value != "")
+                                            this.element.value += "," + f("#fTag_input_"+this.element.id).element.value;
+                                        else
+                                            this.element.value += f("#fTag_input_"+this.element.id).element.value;
+
+                                        var span = document.createElement("span");
+                                        
+                                        span.id = 'fTag_X_'+this.element.id+"_"+f('#fTag_input_'+this.element.id).element.value;
+                                        span.className = "fTags_span";
+                                        span.innerText = f("#fTag_input_"+this.element.id).element.value;
+
+                                        span.innerHTML += "<span onclick='f(\"#"+this.element.id+"\").dropTagValue(\""+f('#fTag_input_'+this.element.id).element.value+"\")' class='fTag_X'>x</span>";
+                                        div2.appendChild(span);
+
+                                        f("#fTag_input_"+this.element.id).element.value = "";
+                                    }
+                                }
+                            });
+                        } //Colocar Function para adiconar TagValue(pode ser excluido ou não)
+                    break;
+                }
+            },
+
+            dropTagValue : function (valor){
+                var arrDrop = this.element.value.split(",");
+                for(var i = 0; i < arrDrop.length; i++){
+                    if(arrDrop[i] == valor){
+                        arrDrop.splice(i ,1);
+                        this.element.value = arrDrop.join(",");
+                        f("#fTag_X_"+this.element.id+"_"+valor).element.remove();
+                    }
+                }
             }
+
+            //Calendar
+            //CalendarEvents
 
         }, ...fAddonsElement};
     else
