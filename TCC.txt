@@ -1,0 +1,37 @@
+Nome: LearnUp
+Plataformas: Web, Desktop e Mobile
+
+Linguagens Utilizadas: HTML, CSS, JavaScript e PHP
+Frameworks Utilizados: Bootstrap, JQuery, Electron e Cordova
+Banco Utilizado: MySql
+
+Esboço: https://bitcs.me/projetos/learnup
+
+Introdução: 
+    LearnUp será uma plataforma de ensino, que ensinará várias coisas ligadas à informatica, com recompensas como
+    Ranking, Moedas, Desafios e etc para prender o Úsuario.
+
+Ideia:
+    A Plataforma será totalmente grátis, mas ela vai ter 2 Tipos de conta:
+
+    Normal - Grátis:
+        Acesso a Todo Conteúdo
+        Com Anuncios
+        Acesso Limitado por número de vidas
+
+    Premium - R$7.90 ~ R$14 por mês:
+        Acesso a Todo Conteúdo
+        Sem Anuncios
+        Acesso Ilimitado
+        Vantagens em Obter Moedas e Pontos para o Ranking
+    
+    O Conteudo será dividido em Setores, Exemplo: Linguagens de Programação, Edição Audio-Visual...
+    Cada Setor vai ter Modulos que será liberado ao progredir com os desafios e o aprendizado.
+
+    Junto o conteúdo terá:
+        Aulas em Vídeo
+        Exercicios
+        Desafios 
+        Competições
+    
+    todos com recompensa para o usuario.
