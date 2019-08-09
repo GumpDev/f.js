@@ -37,3 +37,4 @@ Ideia:
     todos com recompensa para o usuario.
     
     https://stackoverflow.com/questions/30687783/create-custom-language-in-visual-studio-code
+    https://github.com/BrodaNoel/mysql-server
