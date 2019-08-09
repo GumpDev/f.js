@@ -5,33 +5,35 @@ Linguagens Utilizadas: HTML, CSS, JavaScript e PHP
 Frameworks Utilizados: Bootstrap, JQuery, Electron e Cordova
 Banco Utilizado: MySql
 
-Esboço: https://bitcs.me/projetos/learnup
+EsboÃ§o: https://bitcs.me/projetos/learnup
 
-Introdução: 
-    LearnUp será uma plataforma de ensino, que ensinará várias coisas ligadas à informatica, com recompensas como
-    Ranking, Moedas, Desafios e etc para prender o Úsuario.
+IntroduÃ§Ã£o: 
+    LearnUp serÃ¡ uma plataforma de ensino, que ensinarÃ¡ vÃ¡rias coisas ligadas Ã  informatica, com recompensas como
+    Ranking, Moedas, Desafios e etc para prender o Ãšsuario.
 
 Ideia:
-    A Plataforma será totalmente grátis, mas ela vai ter 2 Tipos de conta:
+    A Plataforma serÃ¡ totalmente grÃ¡tis, mas ela vai ter 2 Tipos de conta:
 
-    Normal - Grátis:
-        Acesso a Todo Conteúdo
+    Normal - GrÃ¡tis:
+        Acesso a Todo ConteÃºdo
         Com Anuncios
-        Acesso Limitado por número de vidas
+        Acesso Limitado por nÃºmero de vidas
 
-    Premium - R$7.90 ~ R$14 por mês:
-        Acesso a Todo Conteúdo
+    Premium - R$7.90 ~ R$14 por mÃªs:
+        Acesso a Todo ConteÃºdo
         Sem Anuncios
         Acesso Ilimitado
         Vantagens em Obter Moedas e Pontos para o Ranking
     
-    O Conteudo será dividido em Setores, Exemplo: Linguagens de Programação, Edição Audio-Visual...
-    Cada Setor vai ter Modulos que será liberado ao progredir com os desafios e o aprendizado.
+    O Conteudo serÃ¡ dividido em Setores, Exemplo: Linguagens de ProgramaÃ§Ã£o, EdiÃ§Ã£o Audio-Visual...
+    Cada Setor vai ter Modulos que serÃ¡ liberado ao progredir com os desafios e o aprendizado.
 
-    Junto o conteúdo terá:
-        Aulas em Vídeo
+    Junto o conteÃºdo terÃ¡:
+        Aulas em VÃ­deo
         Exercicios
         Desafios 
-        Competições
+        CompetiÃ§Ãµes
     
     todos com recompensa para o usuario.
+    
+    https://stackoverflow.com/questions/30687783/create-custom-language-in-visual-studio-code
